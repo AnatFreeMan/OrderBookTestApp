@@ -1,0 +1,55 @@
+$header-background:#ddd;
+.order-book {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 16px;
+  margin: 32px auto;
+  padding: 0 16px;
+  max-width: 300px;
+
+  &__container {
+    border: 1px solid $header-background;
+    margin: 8px 8px 16px;
+    height: fit-content;
+    width: 280px;
+
+    &--header {
+      padding: 0.5rem 0.5rem;
+      background: $header-background;
+      min-height: 20px;
+      text-align: center;
+    }
+
+    &--grid {
+      cursor: pointer;
+      padding: 1rem 1rem;
+      border-top: 1px solid $header-background;
+      height: 60px;
+    }
+  }
+
+  &__title {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    height: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  &__item {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  &__viewport {
+    height: 300px;
+    width: auto;
+    border: 1px solid $header-background;
+    &--item  {
+      height: 15px;
+      padding-left: 20px;
+    }
+  }
+}

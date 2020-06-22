@@ -1,0 +1,21 @@
+<div class="order-book">
+  <div class="order-book__container">
+    <div class="order-book__container--header">
+      <h2>Order Book</h2>
+    </div>
+    <div class="order-book__title">
+      <div class="">
+        <span font-size="small" class="order-book__item">Price</span>
+      </div>
+      <div class="">
+        <span font-size="small" class="">Market Size</span>
+      </div>
+
+    </div>
+    <cdk-virtual-scroll-viewport itemSize="15" class="order-book__viewport">
+      <div *cdkVirtualFor="let item of items" class="order-book__viewport--item">{{item}}</div>
+    </cdk-virtual-scroll-viewport>
+</div>
+</div>
+
+
