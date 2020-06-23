@@ -20,13 +20,6 @@ $header-background:#ddd;
       min-height: 20px;
       text-align: center;
     }
-
-    &--grid {
-      cursor: pointer;
-      padding: 1rem 1rem;
-      border-top: 1px solid $header-background;
-      height: 60px;
-    }
   }
 
   &__title {
@@ -36,6 +29,7 @@ $header-background:#ddd;
     height: 20px;
     padding-top: 5px;
     padding-bottom: 5px;
+    border: 1px solid $header-background;
   }
 
   &__item {
@@ -47,9 +41,19 @@ $header-background:#ddd;
     height: 300px;
     width: auto;
     border: 1px solid $header-background;
+
     &--item  {
-      height: 15px;
+      height: 14px;
       padding-left: 20px;
+    }
+  }
+
+  &__common-viewport {
+    max-height: 500px;
+    overflow-y: scroll;
+
+    .order-book__viewport {
+      height: 100%;
     }
   }
 }

@@ -30,7 +30,7 @@ export class WebSocketService {
     this.websocket.complete();
   }
 
-  public sendMessage(msg: any) {
+  public sendMessage(msg: object) {
     this.websocket.next(msg);
   }
 

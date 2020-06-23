@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WebSocketService } from '../../services/web-socket.service';
-import { Config } from '../../models/order-book.models';
+import { Config, Operation, IMessage } from '../../models/order-book.models';
+import { map, scan, filter } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-order-book',
@@ -10,10 +12,10 @@ import { Config } from '../../models/order-book.models';
 
 export class OrderBookComponent implements OnInit, OnDestroy {
 
-  ioConnect: any;
-  items: Array<any> = [];
-  changesQueue: Array<any> = [];
-  queueSize = 60;
+  public itemsBuy$: Observable<IMessage[]>;
+  public itemsSell$: Observable<IMessage[]>;
+  public items$: Observable<IMessage>;
+  private itemsCount = 60;
 
   constructor(private webSocketService: WebSocketService) { }
 
@@ -23,33 +25,34 @@ export class OrderBookComponent implements OnInit, OnDestroy {
 
   private initConnect(): void {
     this.webSocketService.initWSocket();
-    this.webSocketService.messages.subscribe(data => {
-      this.addChanges(data);
-      this.sortByPrice(this.changesQueue);
-    });
 
+    this.items$ = this.webSocketService.messages
+      .pipe(
+        map(this.fetchItem)
+      );
+
+    this.itemsBuy$ = this.items$
+      .pipe(
+        filter(({type}) => type === Operation.BUY),
+        scan((acc, val) => [...acc, val].slice(-this.itemsCount), []),
+      );
+
+    this.itemsSell$ = this.items$
+      .pipe(
+        filter(({type}) => type === Operation.SELL),
+        scan((acc, val) => [...acc, val].slice(-this.itemsCount), []),
+      );
     this.webSocketService.sendMessage(Config.subscribeMsg);
   }
 
-  private sortByPrice(arr): void {
-    const tmpArr = arr.map((item) => item).sort((a, b) => (a.price < b.price) ? 1 : -1);
-    this.items = tmpArr.map((item) =>
-    `  ${item.side} | ${item.price.toFixed(2).padStart(12)} | ${parseFloat(item.size).toFixed(8).padStart(16)}`);
+  trackByIdx(i: number) {
+    return i;
   }
 
-  private addChanges(data): void {
-    if (this.changesQueue.length >= this.queueSize) {
-      this.changesQueue.shift();
-    }
-    const fetchItem = arr => [
-      {
-        side: arr[0],
-        price: parseFloat(arr[1]),
-        size: arr[2]
-      }
-    ];
+  private fetchItem(data: string[]) {
+    const [type, price, size] = data;
 
-    this.changesQueue = [...this.changesQueue, ...fetchItem(data)];
+    return { type, price, size };
   }
 
   ngOnDestroy() {

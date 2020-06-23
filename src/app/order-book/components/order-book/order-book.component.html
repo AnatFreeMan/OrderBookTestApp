@@ -10,11 +10,22 @@
       <div class="">
         <span font-size="small" class="">Market Size</span>
       </div>
-
     </div>
-    <cdk-virtual-scroll-viewport itemSize="15" class="order-book__viewport">
-      <div *cdkVirtualFor="let item of items" class="order-book__viewport--item">{{item}}</div>
-    </cdk-virtual-scroll-viewport>
+    <div class="order-book__common-viewport">
+      <div class="order-book__viewport">
+        <div *ngFor="let buy of itemsBuy$ | async | sortBy: 'desc' : 'price'; trackBy: trackByIdx"
+             class="order-book__viewport--item">
+          <pre>{{buy | stringifyItem }}</pre>
+        </div>
+      </div>
+      <hr />
+      <div class="order-book__viewport">
+        <div *ngFor="let sell of itemsSell$ | async | sortBy: 'desc' : 'price'; trackBy: trackByIdx"
+             class="order-book__viewport--item">
+          <pre>{{sell | stringifyItem }}</pre>
+        </div>
+      </div>
+    </div>
 </div>
 </div>
 

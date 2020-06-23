@@ -10,3 +10,14 @@ export const Config = {
     ]
   }
 };
+
+export enum Operation {
+  SELL = 'sell',
+  BUY = 'buy'
+}
+
+export interface IMessage {
+  type: string;
+  price: string;
+  size: string;
+}
